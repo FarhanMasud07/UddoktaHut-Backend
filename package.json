@@ -1,0 +1,31 @@
+{
+  "name": "uddoktahut-backend",
+  "version": "1.0.0",
+  "description": "This is uddoktahut backend saas all in one ecomerce app",
+  "license": "MIT",
+  "author": "Farhan",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "dev": "npx nodemon main.js",
+    "build": "npm install --production"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "google-libphonenumber": "^3.2.40",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.10.0",
+    "nodemon": "^3.1.9",
+    "openai": "^4.89.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "pg": "^8.14.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.6",
+    "zod": "^3.24.2"
+  }
+}
