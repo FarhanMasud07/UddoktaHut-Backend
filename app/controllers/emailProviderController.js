@@ -8,7 +8,10 @@ const sendEmail = async (req, res, next) => {
     await sendEmailVarification(req.body);
     res
       .status(200)
-      .json({ message: "Otp sended successfully please check you email" });
+      .json({
+        success: true,
+        message: "Otp sended successfully please check you email",
+      });
   } catch (err) {
     next(err);
   }

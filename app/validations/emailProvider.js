@@ -9,7 +9,7 @@ const emailproviderSchema = z.object({
 });
 
 const emailVerifySchema = z.object({
-  email: z
+  identifier: z
     .string({ message: "Email is required" })
     .email({ message: "Email is not corect" }),
   otp: z.number({ message: "Otp is required" }).min(0),

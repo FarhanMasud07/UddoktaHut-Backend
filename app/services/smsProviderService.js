@@ -38,12 +38,12 @@ const sendSmsProvider = async (data) => {
 };
 
 const verifySmsProvider = async (data) => {
-  const { phoneNumber, otp } = data;
-  let record = verifyOtp(phoneNumber, Number(otp));
+  const { identifier, otp } = data;
+  let record = verifyOtp(identifier, Number(otp));
   if (record) {
     const { name, password } = record;
     if (!name || !password) throw new Error("No name or password found!");
-    return await User.create({ name, password, phone_number: phoneNumber });
+    return await User.create({ name, password, phone_number: identifier });
   }
   return null;
 };

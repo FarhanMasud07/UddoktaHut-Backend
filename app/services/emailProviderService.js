@@ -41,12 +41,12 @@ const sendEmailVarification = async (data) => {
 };
 
 const verifyEmailToProceed = async (data) => {
-  const { email, otp } = data;
-  let record = verifyOtp(email, Number(otp));
+  const { identifier, otp } = data;
+  let record = verifyOtp(identifier, Number(otp));
   if (record) {
     const { name, password } = record;
     if (!name || !password) throw new Error("No name or password found!");
-    return await User.create({ email, name, password });
+    return await User.create({ email: identifier, name, password });
   }
   return null;
 };
