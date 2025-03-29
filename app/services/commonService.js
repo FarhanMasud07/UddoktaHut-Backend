@@ -29,7 +29,7 @@ const setCookieAccessRefreshToken = (res, verifiedTokens) => {
   const { accessToken, refreshToken } = verifiedTokens;
   const cookieOption = {
     httpOnly: true,
-    secure: false,
+    secure: env.NODE_ENV === "production",
     sameSite: "Lax",
     path: "/",
     maxAge: 60 * 60 * 1000,
