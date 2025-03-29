@@ -1,16 +1,16 @@
 import { z } from "zod";
 
 const userRolesSchema = z.object({
-  userId: z
-    .number()
-    .int()
-    .positive()
-    .min(1, { message: "User ID must be a positive integer." }),
+  token: z.string({ message: "token is required" }),
   roles: z
-    .number()
-    .int()
-    .positive()
-    .min(1, { message: "Role ID must be a positive integer." }),
+    .array(
+      z
+        .number()
+        .int()
+        .positive()
+        .min(1, { message: "Role ID must be a positive integer." })
+    )
+    .nonempty({ message: "Atleast one role needed" }),
 });
 
 export { userRolesSchema };

@@ -7,6 +7,7 @@ export const env = {
   UDDOKTAHUT_EMAIL: process.env.UDDOKTAHUT_EMAIL,
   SMTP_PORT: process.env.SMTP_PORT,
   JWT_SECRET: process.env.JWT_SECRET,
+  JWT_REFRESH_TOKEN: process.env.JWT_REFRESH_TOKEN,
   SMS_API_KEY: process.env.SMS_API_KEY,
   SMS_SENDER_ID: process.env.SMS_SENDER_ID,
   SMS_TYPE: process.env.SMS_TYPE,
@@ -18,4 +19,5 @@ export const env = {
   DB_HOST: process.env.DB_HOST,
   DB_PORT: process.env.DB_PORT,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  isProd: process.env.NODE_ENV === "production",
 };

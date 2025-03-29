@@ -1,13 +1,15 @@
+import jwt from "jsonwebtoken";
 import {
   generateOtp,
   passwordHashing,
   saveOtp,
   verifyOtp,
 } from "../lib/utils.js";
-import { Role, UserRole } from "../models/RootModel.js";
+import { Role, sequelize, UserRole } from "../models/RootModel.js";
 import { env } from "../config/env.js";
 import { User } from "../models/RootModel.js";
 import nodemailer from "nodemailer";
+import { generateTokens } from "./commonService.js";
 
 const transporter = nodemailer.createTransport({
   host: env.SMTP_HOST,
@@ -47,7 +49,12 @@ const verifyEmailToProceed = async (data) => {
   if (record) {
     const { name, password } = record;
     if (!name || !password) throw new Error("No name or password found!");
-    return await User.create({ email: identifier, name, password });
+    const user = await User.create({ email: identifier, name, password });
+    const userPayload = {
+      id: user.id,
+      email: user.email,
+    };
+    return generateTokens(userPayload);
   }
   return null;
 };
@@ -88,21 +95,64 @@ const verifySmsProvider = async (data) => {
   if (record) {
     const { name, password } = record;
     if (!name || !password) throw new Error("No name or password found!");
-    return await User.create({ name, password, phone_number: identifier });
+    const user = await User.create({
+      name,
+      password,
+      phone_number: identifier,
+    });
+    const userPayload = {
+      id: user.id,
+      phoneNumber: user.phone_number,
+    };
+    return generateTokens(userPayload);
   }
   return null;
 };
 
-const assignRoleToUser = async (userId, roleId) => {
-  const validRole = await Role.findOne({
-    where: {
-      id: roleId,
-    },
-  });
+const assignRoleToUser = async (token, roles) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const extractedPayload = jwt.verify(token, env.JWT_SECRET);
+    extractedPayload.roles = roles.map((roleId) =>
+      roleId === 1 ? "admin" : "employee"
+    );
 
-  if (!validRole) throw new Error("Role is invalid");
+    const validRoles = await Role.findAll({
+      where: {
+        id: roles,
+      },
+      transaction,
+    });
 
-  await UserRole.create({ user_id: userId, role_id: roleId });
+    if (validRoles.length !== roles.length)
+      throw new Error("Some roles are invalid");
+
+    const validUser = await Role.findOne({
+      where: {
+        id: extractedPayload.id,
+      },
+      transaction,
+    });
+
+    if (!validUser) throw new Error("User is invalid");
+
+    await UserRole.destroy({ where: { user_id: validUser.id }, transaction });
+    const userRoles = await UserRole.bulkCreate(
+      roles.map((roleId) => ({
+        user_id: validUser.id,
+        role_id: roleId,
+      })),
+      { transaction }
+    );
+
+    await transaction.commit();
+
+    if (userRoles && userRoles.length) return generateTokens(extractedPayload);
+    return null;
+  } catch (err) {
+    await transaction.rollback();
+    throw new Error(err.message);
+  }
 };
 
 export {
