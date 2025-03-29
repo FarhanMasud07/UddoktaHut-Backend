@@ -1,10 +1,8 @@
-import { emailProviderRoute } from "./emailProviderRoutes.js";
-import { smsProviderRoutes } from "./smsProviderRoutes.js";
 import { storeAiRoutes } from "./storeAiRoutes.js";
+import { userRoutes } from "./userRoutes.js";
 
 const rootRoute = (app) => {
-  app.use("/mail", emailProviderRoute);
-  app.use("/sms", smsProviderRoutes);
+  app.use("/user", userRoutes);
   app.use("/store-ai", storeAiRoutes);
 };
 

@@ -1,6 +1,20 @@
 import { sequelize } from "../config/database.js";
 import { env } from "../config/env.js";
+import Role from "./Role.js";
 import User from "./User.js";
+import UserRole from "./UserRole.js";
+
+// USER_ROLE (MANY TO MANY)
+User.belongsToMany(Role, {
+  through: UserRole,
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+});
+Role.belongsToMany(User, {
+  through: UserRole,
+  foreignKey: "role_id",
+  onDelete: "CASCADE",
+});
 
 const syncSequlizeBasedOnEnvironment = async () => {
   await sequelize.authenticate();
@@ -22,4 +36,4 @@ const syncSequlizeBasedOnEnvironment = async () => {
   console.log("✅ Database synced successfully.");
 };
 
-export { syncSequlizeBasedOnEnvironment, sequelize, User };
+export { syncSequlizeBasedOnEnvironment, sequelize, User, Role, UserRole };
