@@ -20,11 +20,7 @@ import {
 const userRoutes = express.Router();
 
 userRoutes.post("/mail/send", validate(emailproviderSchema), sendEmail);
-<<<<<<< HEAD
 userRoutes.post("/mail/verify", validate(emailVerifySchema), verifyEmail);
-=======
-userRoutes.post("/mail/verify", verifyEmail);
->>>>>>> 2e9bbff (Changes)
 
 userRoutes.post("/sms/send", validate(smsProviderSchema), sendSms);
 userRoutes.post("/sms/verify", validate(smsProviderVerifySchema), smsVerify);
