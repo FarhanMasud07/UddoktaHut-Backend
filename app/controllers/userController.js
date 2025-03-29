@@ -29,7 +29,7 @@ const verifyEmail = async (req, res, next) => {
         status: 400,
       });
 
-    setCookieAccessRefreshToken(res);
+    setCookieAccessRefreshToken(res, verifiedTokens);
 
     return res.status(200).json({
       verified: true,
