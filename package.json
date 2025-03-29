@@ -8,7 +8,9 @@
   "main": "main.js",
   "scripts": {
     "dev": "npx nodemon main.js",
-    "build": "npm install --production"
+    "build": "npm install --production",
+    "seed-all": "npx sequelize-cli db:seed:all",
+    "seed-generate": "npx sequelize-cli seed:generate --name"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
