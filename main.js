@@ -12,10 +12,15 @@ const port = env.PORT || 4000;
 app.use(express.json());
 app.use(
   cors(
-    !env.isProd && {
-      origin: "http://uddoktahut.local:3000",
-      credentials: true,
-    }
+    !env.isProd
+      ? {
+          origin: "http://uddoktahut.local:3000",
+          credentials: true,
+        }
+      : {
+          origin: "https://uddoktahut.com",
+          credentials: true,
+        }
   )
 );
 app.use(cookieParser());

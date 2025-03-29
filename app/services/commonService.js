@@ -35,7 +35,11 @@ const setCookieAccessRefreshToken = (res, verifiedTokens) => {
     maxAge: 60 * 60 * 1000,
   };
 
-  if (!env.isProd) cookieOption.domain = "uddoktahut.local";
+  if (!env.isProd) {
+    cookieOption.domain = "uddoktahut.local";
+  } else {
+    cookieOption.domain = "uddoktahut.com";
+  }
 
   res.cookie("accessToken", accessToken, cookieOption);
 
