@@ -44,10 +44,13 @@ const setCookieAccessRefreshToken = (res, verifiedTokens) => {
 const clearCookie = (res) => {
   const cookieOption = {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "Lax",
+    secure: true,
+    sameSite: "None",
     path: "/",
   };
+  if (env.isProd) {
+    cookieOption.domain = ".uddoktahut.com";
+  }
   res.clearCookie("accessToken", cookieOption);
   res.clearCookie("refreshToken", cookieOption);
 };

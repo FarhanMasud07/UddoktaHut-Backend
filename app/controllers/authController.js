@@ -1,5 +1,8 @@
 import { getRefreshToken, getUserToken } from "../services/authService.js";
-import { setCookieAccessRefreshToken } from "../services/commonService.js";
+import {
+  clearCookie,
+  setCookieAccessRefreshToken,
+} from "../services/commonService.js";
 
 const loginUser = async (req, res, next) => {
   try {
@@ -20,6 +23,15 @@ const loginUser = async (req, res, next) => {
   }
 };
 
+const logout = (req, res, next) => {
+  try {
+    clearCookie(res);
+    res.status(200).json({ accessToken });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const refreshToken = (req, res, next) => {
   try {
     const accessToken = getRefreshToken(req.body);
@@ -29,4 +41,4 @@ const refreshToken = (req, res, next) => {
   }
 };
 
-export { loginUser, refreshToken };
+export { loginUser, logout, refreshToken };
