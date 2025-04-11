@@ -26,7 +26,7 @@ const loginUser = async (req, res, next) => {
 const logout = (req, res, next) => {
   try {
     clearCookie(res);
-    res.status(200).json({ accessToken });
+    res.status(200).json({ isLoggedOut: true });
   } catch (err) {
     next(err);
   }
