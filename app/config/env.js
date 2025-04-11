@@ -18,6 +18,7 @@ export const env = {
   DB_PASS: process.env.DB_PASS,
   DB_HOST: process.env.DB_HOST,
   DB_PORT: process.env.DB_PORT,
-  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  // OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   isProd: process.env.NODE_ENV === "production",
+  isDev: process.env.NODE_ENV === "development",
 };

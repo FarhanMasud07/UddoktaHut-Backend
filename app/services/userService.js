@@ -1,13 +1,17 @@
-import jwt from "jsonwebtoken";
 import {
   generateOtp,
   passwordHashing,
   saveOtp,
   verifyOtp,
 } from "../lib/utils.js";
-import { Role, sequelize, UserRole } from "../models/RootModel.js";
+import {
+  Role,
+  sequelize,
+  UserRole,
+  Subscription,
+} from "../models/RootModel.js";
 import { env } from "../config/env.js";
-import { User } from "../models/RootModel.js";
+import { User, Store } from "../models/RootModel.js";
 import nodemailer from "nodemailer";
 import { generateTokens } from "./commonService.js";
 
@@ -54,7 +58,7 @@ const verifyEmailToProceed = async (data) => {
       id: user.id,
       email: user.email,
     };
-    return generateTokens(userPayload);
+    return generateTokens(userPayload, false);
   }
   return null;
 };
@@ -104,50 +108,166 @@ const verifySmsProvider = async (data) => {
       id: user.id,
       phoneNumber: user.phone_number,
     };
-    return generateTokens(userPayload);
+    return generateTokens(userPayload, false);
   }
   return null;
 };
 
-const assignRoleToUser = async (token, roles) => {
+const onboardedAccess = async (id) => {
+  const user = await User.findOne({
+    where: { id },
+    include: [
+      {
+        model: Role,
+        through: { model: UserRole, attributes: ["onboarded"] },
+        attributes: ["id", "role_name"],
+      },
+      {
+        model: Store,
+      },
+    ],
+  });
+
+  return {
+    name: user.name,
+    email: user.email,
+    phoneNumber: user.phone_number,
+    onboarded: user.Roles[0]?.user_roles?.onboarded,
+    role: user.Roles[0]?.user_roles?.role_id,
+  };
+};
+
+async function validateUserAndRoles(userId, roles, transaction) {
+  const [validUser, validRoles] = await Promise.all([
+    User.findOne({ where: { id: userId }, transaction }),
+    Role.findAll({ where: { id: roles }, transaction }),
+  ]);
+
+  if (!validUser) throw new Error("User is invalid");
+  if (validRoles.length !== roles.length)
+    throw new Error("Some roles are invalid");
+
+  return { validUser, validRoles };
+}
+
+async function clearPreviousUserData(userId, transaction) {
+  await Promise.all([
+    UserRole.destroy({ where: { user_id: userId }, transaction }),
+    Store.destroy({ where: { user_id: userId }, transaction }),
+  ]);
+}
+
+async function createUserRoles(userId, roles, onboarded, transaction) {
+  return await UserRole.bulkCreate(
+    roles.map((roleId) => ({ user_id: userId, role_id: roleId, onboarded })),
+    { transaction }
+  );
+}
+
+async function createStoreAndSubscription(userId, storeData, transaction) {
+  const store = await Store.create(
+    { user_id: userId, ...storeData },
+    { transaction }
+  );
+
+  const now = new Date();
+  const trialEnds = new Date(now);
+  trialEnds.setDate(now.getDate() + 7);
+
+  await Subscription.create(
+    {
+      store_id: store.id,
+      status: "trialing",
+      start_date: now,
+      trial_ends_at: trialEnds,
+      end_date: trialEnds,
+      is_auto_renew: false,
+      plan_id: null,
+    },
+    { transaction }
+  );
+
+  return store;
+}
+
+function generateFinalTokenAfterOnboarded(validUser, roles, store, onboarded) {
+  const payload = validUser.email
+    ? {
+        id: validUser.id,
+        email: validUser.email,
+        roles,
+        storeName: store.store_name,
+        storeAddress: store.store_address,
+        storeType: store.store_type,
+        storeUrl: store.store_url,
+      }
+    : {
+        id: validUser.id,
+        phoneNumber: validUser.phoneNumber,
+        roles,
+        storeName: store.store_name,
+        storeAddress: store.store_address,
+        storeType: store.store_type,
+        storeUrl: store.store_url,
+      };
+
+  const tokens = generateTokens(payload, onboarded);
+  return { tokens, onboarded };
+}
+
+const assignRoleToUserAndCreateStore = async (data) => {
+  const { userId, roles, storeName, storeAddress, storeType } = data;
   const transaction = await sequelize.transaction();
+
   try {
-    const extractedPayload = jwt.verify(token, env.JWT_SECRET);
-    extractedPayload.roles = roles.map((roleId) =>
-      roleId === 1 ? "admin" : "employee"
+    const existStore = await Store.findOne({
+      where: { store_name: storeName },
+      transaction,
+    });
+    if (existStore) throw new Error("This (business/store) name already exist");
+
+    const isAdmin = roles.includes(1);
+    const onboarded = isAdmin;
+
+    const { validUser } = await validateUserAndRoles(
+      userId,
+      roles,
+      transaction
     );
+    await clearPreviousUserData(validUser.id, transaction);
 
-    const validRoles = await Role.findAll({
-      where: {
-        id: roles,
+    const userRoles = await createUserRoles(
+      validUser.id,
+      roles,
+      onboarded,
+      transaction
+    );
+    const store = await createStoreAndSubscription(
+      validUser.id,
+      {
+        store_name: storeName,
+        store_address: storeAddress,
+        store_type: storeType,
       },
-      transaction,
-    });
-
-    if (validRoles.length !== roles.length)
-      throw new Error("Some roles are invalid");
-
-    const validUser = await Role.findOne({
-      where: {
-        id: extractedPayload.id,
-      },
-      transaction,
-    });
-
-    if (!validUser) throw new Error("User is invalid");
-
-    await UserRole.destroy({ where: { user_id: validUser.id }, transaction });
-    const userRoles = await UserRole.bulkCreate(
-      roles.map((roleId) => ({
-        user_id: validUser.id,
-        role_id: roleId,
-      })),
-      { transaction }
+      transaction
     );
 
     await transaction.commit();
 
-    if (userRoles && userRoles.length) return generateTokens(extractedPayload);
+    const storePayload = {
+      store_name: storeName,
+      store_address: storeAddress,
+      store_type: storeType,
+      store_url: store.store_url,
+    };
+
+    if (userRoles?.length && store)
+      return generateFinalTokenAfterOnboarded(
+        validUser,
+        roles,
+        storePayload,
+        onboarded
+      );
     return null;
   } catch (err) {
     await transaction.rollback();
@@ -160,5 +280,6 @@ export {
   verifyEmailToProceed,
   sendSmsProvider,
   verifySmsProvider,
-  assignRoleToUser,
+  assignRoleToUserAndCreateStore,
+  onboardedAccess,
 };

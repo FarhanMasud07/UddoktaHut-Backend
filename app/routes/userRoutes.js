@@ -1,11 +1,12 @@
 import express from "express";
 import { validate } from "../middleware/validateMiddleware.js";
-import { userRolesSchema } from "../validations/userRoleSchema.js";
+import { userRolesAndStoreSchema } from "../validations/userRoleSchema.js";
 import {
-  addRolesToUser,
+  addRolesToUserAndStore,
   sendEmail,
   sendSms,
   smsVerify,
+  userOnboardedAccess,
   verifyEmail,
 } from "../controllers/userController.js";
 import {
@@ -25,11 +26,12 @@ userRoutes.post("/mail/verify", validate(emailVerifySchema), verifyEmail);
 userRoutes.post("/sms/send", validate(smsProviderSchema), sendSms);
 userRoutes.post("/sms/verify", validate(smsProviderVerifySchema), smsVerify);
 
+userRoutes.post("/authenticate", userOnboardedAccess);
+
 userRoutes.post(
   "/assign-role",
-  validate(userRolesSchema),
-  //authenticateUser,
-  addRolesToUser
+  validate(userRolesAndStoreSchema),
+  addRolesToUserAndStore
 );
 
 export { userRoutes };

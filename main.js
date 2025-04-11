@@ -14,7 +14,7 @@ app.use(
   cors(
     !env.isProd
       ? {
-          origin: "http://uddoktahut.local:3000",
+          origin: "http://localhost:3000",
           credentials: true,
         }
       : {

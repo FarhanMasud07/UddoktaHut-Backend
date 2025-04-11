@@ -20,6 +20,10 @@ const UserRole = sequelize.define(
         key: "id",
       },
     },
+    onboarded: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   },
   {
     timestamps: false,
