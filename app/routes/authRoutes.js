@@ -10,7 +10,7 @@ import {
 const authRoutes = express.Router();
 
 authRoutes.post("/login", validate(loginSchema), loginUser);
-authRoutes.post("/logout", logout);
+authRoutes.get("/logout", logout);
 authRoutes.post("/refresh", refreshToken);
 
 export { authRoutes };
