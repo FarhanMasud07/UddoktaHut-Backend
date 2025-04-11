@@ -26,15 +26,15 @@ const setCookieAccessRefreshToken = (res, verifiedTokens) => {
   const { accessToken, refreshToken } = verifiedTokens;
   const cookieOption = {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
+    secure: true,
     sameSite: "None",
     path: "/",
     maxAge: 60 * 60 * 1000,
   };
 
-  if (env.isProd) {
-    cookieOption.domain = "uddoktahut.com";
-  }
+  // if (env.isProd) {
+  //   cookieOption.domain = "uddoktahut.com";
+  // }
 
   res.cookie("accessToken", accessToken, cookieOption);
 
