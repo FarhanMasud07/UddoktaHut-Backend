@@ -27,7 +27,7 @@ const setCookieAccessRefreshToken = (res, verifiedTokens) => {
   const cookieOption = {
     httpOnly: true,
     secure: env.NODE_ENV === "production",
-    sameSite: "Lax",
+    sameSite: "None",
     path: "/",
     maxAge: 60 * 60 * 1000,
   };
