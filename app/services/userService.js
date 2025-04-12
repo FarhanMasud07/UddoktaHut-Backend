@@ -216,7 +216,7 @@ function generateFinalTokenAfterOnboarded(validUser, roles, store, onboarded) {
 }
 
 const assignRoleToUserAndCreateStore = async (data) => {
-  const { userId, roles, storeName, storeAddress, storeType } = data;
+  const { userId, roles, storeName, storeAddress, storeType, storeUrl } = data;
   const transaction = await sequelize.transaction();
 
   try {
@@ -248,6 +248,7 @@ const assignRoleToUserAndCreateStore = async (data) => {
         store_name: storeName,
         store_address: storeAddress,
         store_type: storeType,
+        store_url: storeUrl,
       },
       transaction
     );
@@ -258,7 +259,7 @@ const assignRoleToUserAndCreateStore = async (data) => {
       store_name: storeName,
       store_address: storeAddress,
       store_type: storeType,
-      store_url: store.store_url,
+      store_url: storeUrl,
     };
 
     if (userRoles?.length && store)

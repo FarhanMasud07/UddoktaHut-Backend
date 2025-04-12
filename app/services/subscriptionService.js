@@ -66,8 +66,8 @@ const getSubscriptionStatus = async ({ userId }) => {
   return { user: userData };
 };
 
-const getSubscribedStore = async ({ shopId }) => {
-  const store = await Store.findOne({ where: { id: shopId } });
+const getSubscribedStore = async ({ storeName }) => {
+  const store = await Store.findOne({ where: { store_name: storeName } });
 
   if (!store) return { storeData: null };
 

@@ -7,7 +7,7 @@ const subscriptionSchema = z.object({
 });
 
 const subscribedStoreSchema = z.object({
-  shopId: z.string({ message: "Store id is required" }),
+  storeName: z.string({ message: "Store name is required" }),
 });
 
 export { subscriptionSchema, subscribedStoreSchema };

@@ -26,8 +26,8 @@ const setCookieAccessRefreshToken = (res, verifiedTokens) => {
   const { accessToken, refreshToken } = verifiedTokens;
   const cookieOption = {
     httpOnly: true,
-    secure: true,
-    sameSite: "None",
+    secure: env.isProd ? true : false,
+    sameSite: env.isProd ? "None" : "Lax",
     path: "/",
     maxAge: 60 * 60 * 1000,
   };
@@ -44,8 +44,8 @@ const setCookieAccessRefreshToken = (res, verifiedTokens) => {
 const clearCookie = (res) => {
   const cookieOption = {
     httpOnly: true,
-    secure: true,
-    sameSite: "None",
+    secure: env.isProd ? true : false,
+    sameSite: env.isProd ? "None" : "Lax",
     path: "/",
   };
   if (env.isProd) {

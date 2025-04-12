@@ -17,7 +17,7 @@ subscriptionRoutes.post(
   subscriptionStatus
 );
 subscriptionRoutes.get(
-  "/store/:shopId",
+  "/store/:storeName",
   validate(subscribedStoreSchema, "params"),
   subscribedStore
 );
