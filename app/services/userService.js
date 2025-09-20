@@ -17,12 +17,14 @@ import { generateTokens } from "./commonService.js";
 
 const transporter = nodemailer.createTransport({
   host: env.SMTP_HOST,
-  port: env.SMTP_PORT,
+  port: Number(env.SMTP_PORT),
   secure: true,
   auth: {
     user: env.UDDOKTAHUT_EMAIL,
     pass: env.ZOHO_APP_PASSWORD,
   },
+  logger: true,
+  debug: true, 
 });
 
 const sendEmailVarification = async (data) => {
