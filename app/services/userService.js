@@ -18,7 +18,7 @@ import { generateTokens } from "./commonService.js";
 const transporter = nodemailer.createTransport({
   host: env.SMTP_HOST,
   port: Number(env.SMTP_PORT),
-  secure: false,
+  secure: true,
   auth: {
     user: env.UDDOKTAHUT_EMAIL,
     pass: env.ZOHO_APP_PASSWORD,
