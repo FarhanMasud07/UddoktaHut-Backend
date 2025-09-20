@@ -3,6 +3,10 @@ dotenv.config();
 export const env = {
   PORT: process.env.PORT,
   ZOHO_APP_PASSWORD: process.env.ZOHO_APP_PASSWORD,
+  ZOHO_CLIENT_ID: process.env.ZOHO_CLIENT_ID,
+  ZOHO_CLIENT_SECRET: process.env.ZOHO_CLIENT_SECRET,
+  ZOHO_REFRESH_TOKEN: process.env.ZOHO_REFRESH_TOKEN,
+  ZOHO_ACCOUNT_ID: process.env.ZOHO_ACCOUNT_ID,
   SMTP_HOST: process.env.SMTP_HOST,
   UDDOKTAHUT_EMAIL: process.env.UDDOKTAHUT_EMAIL,
   SMTP_PORT: process.env.SMTP_PORT,
