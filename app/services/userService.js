@@ -28,9 +28,8 @@ const transporter = nodemailer.createTransport({
     pass: env.ZOHO_APP_PASSWORD,
   },
   logger: true,
-  debug: true, 
+  debug: true,
 });
-
 
 const sendEmailVarification = async (data) => {
   const { email, name, password } = data;
@@ -41,56 +40,56 @@ const sendEmailVarification = async (data) => {
   const otp = generateOtp();
   saveOtp({ identifier: email, name, password: hashedPassword }, Number(otp));
 
-    const tokenParams = new URLSearchParams({
-      refresh_token: env.ZOHO_REFRESH_TOKEN,
-      client_id: env.ZOHO_CLIENT_ID,
-      client_secret: env.ZOHO_CLIENT_SECRET,
-      grant_type: "refresh_token",
-    });
+  const tokenParams = new URLSearchParams({
+    refresh_token: env.ZOHO_REFRESH_TOKEN,
+    client_id: env.ZOHO_CLIENT_ID,
+    client_secret: env.ZOHO_CLIENT_SECRET,
+    grant_type: "refresh_token",
+  });
 
-    const tokenResp = await fetch("https://accounts.zoho.com/oauth/v2/token", {
-      method: "POST",
-      body: tokenParams,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
+  const tokenResp = await fetch("https://accounts.zoho.com/oauth/v2/token", {
+    method: "POST",
+    body: tokenParams,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
 
-    const tokenData = await tokenResp.json();
-    const accessToken = tokenData.access_token;
+  const tokenData = await tokenResp.json();
+  const accessToken = tokenData.access_token;
 
-    // 2️⃣ Get Zoho account ID
-    const accountId = env.ZOHO_ACCOUNT_ID;
+  // 2️⃣ Get Zoho account ID
+  const accountId = env.ZOHO_ACCOUNT_ID;
 
-    // 3️⃣ Prepare email content
-    const subject = "Please verify your email";
-    const content = `
+  // 3️⃣ Prepare email content
+  const subject = "Please verify your email";
+  const content = `
       <main style="display: flex; flex-direction: column; margin: 0 auto">
         <p style="font-weight: 700; font-size: 20px">Welcome to UddoktaHut, ${name}</p>
         <p style="font-weight: 500; font-size: 16px">Your OTP is: <b>${otp}</b></p>
       </main>
     `;
 
-    // 4️⃣ Send email
-    const sendResp = await fetch(
-      `https://mail.zoho.com/api/accounts/${accountId}/messages`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Zoho-oauthtoken ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fromAddress: process.env.UDDOKTAHUT_EMAIL,
-          toAddress: email,
-          subject,
-          content,
-        }),
-      }
-    );
+  // 4️⃣ Send email
+  const sendResp = await fetch(
+    `https://mail.zoho.com/api/accounts/${accountId}/messages`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Zoho-oauthtoken ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fromAddress: process.env.UDDOKTAHUT_EMAIL,
+        toAddress: email,
+        subject,
+        content,
+      }),
+    }
+  );
 
-    const sendData = await sendResp.json();
-    return sendData;
+  const sendData = await sendResp.json();
+  return sendData;
 };
 
 const verifyEmailToProceed = async (data) => {
@@ -190,6 +189,10 @@ async function validateUserAndRoles(userId, roles, transaction) {
   ]);
 
   if (!validUser) throw new Error("User is invalid");
+
+  console.log(validRoles);
+  console.log(roles);
+
   if (validRoles.length !== roles.length)
     throw new Error("Some roles are invalid");
 
