@@ -42,14 +42,14 @@ const syncSequlizeBasedOnEnvironment = async () => {
   console.log("✅ Database connected successfully.");
   switch (env.NODE_ENV) {
     case "development":
-      await sequelize.sync({ force: true });
+      // await sequelize.sync({ force: true });
       break;
     case "staging":
       // await sequelize.sync({ alter: true }); // ⚠️ Keeps data but may be slow
       await sequelize.sync({ force: true });
       break;
     case "production":
-      await sequelize.sync({ force: true });
+      // await sequelize.sync({ force: true });
       console.log("✅ Running in production mode, use migrations!");
       break;
     default:
