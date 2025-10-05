@@ -12,6 +12,8 @@ const verifiedStore = async (req, res, next) => {
     return res.status(200).json({
       verifiedStore: true,
       message: "Congratulations store found",
+      store: response.store,
+      products: response.products,
     });
   } catch (err) {
     next(err);

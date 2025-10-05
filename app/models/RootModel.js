@@ -6,6 +6,7 @@ import UserRole from "./UserRole.js";
 import Store from "./Store.js";
 import Subscription from "./Subscription.js";
 import Plan from "./Plan.js";
+import Product from "./Product.js";
 
 // USER_ROLE (MANY TO MANY)
 User.belongsToMany(Role, {
@@ -16,6 +17,26 @@ User.belongsToMany(Role, {
 Role.belongsToMany(User, {
   through: UserRole,
   foreignKey: "role_id",
+  onDelete: "CASCADE",
+});
+
+// PRODUCT (ONE TO MANY)
+User.hasMany(Product, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+});
+Product.belongsTo(User, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+});
+
+// PRODUCT (STORE RELATION)
+Store.hasMany(Product, {
+  foreignKey: "store_id",
+  onDelete: "CASCADE",
+});
+Product.belongsTo(Store, {
+  foreignKey: "store_id",
   onDelete: "CASCADE",
 });
 
@@ -67,4 +88,5 @@ export {
   Store,
   Subscription,
   Plan,
+  Product,
 };

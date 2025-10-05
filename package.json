@@ -10,7 +10,8 @@
     "dev": "npx nodemon main.js",
     "build": "npm install --production",
     "seed-all": "npx sequelize-cli db:seed:all",
-    "seed-generate": "npx sequelize-cli seed:generate --name"
+    "seed-generate": "npx sequelize-cli seed:generate --name",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

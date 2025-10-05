@@ -8,6 +8,7 @@ const validate =
       next();
     } catch (err) {
       if (err instanceof ZodError) {
+        console.log(err);
         return res.status(400).json({
           error: "ValidationError",
           details: err.errors,
