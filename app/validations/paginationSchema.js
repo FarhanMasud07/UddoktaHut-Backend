@@ -11,5 +11,5 @@ export const paginationQuerySchema = z.object({
     .transform((val) => parseInt(val, 10) || 10),
   search: z.string().optional().default(""),
   sortBy: z.string().optional().default("id"),
-  sortOrder: z.string().optional().default("asc"),
+  sortOrder: z.string().optional().default("desc"),
 });

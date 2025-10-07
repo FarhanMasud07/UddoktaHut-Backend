@@ -1,3 +1,8 @@
+// To optimize search performance, add indexes in a migration:
+// await queryInterface.addIndex('Products', ['name']);
+// await queryInterface.addIndex('Products', ['category']);
+// await queryInterface.addIndex('Products', ['sku']);
+
 import { Product, Store } from "../models/RootModel.js";
 import { paginateQuery } from "../lib/pagination.js";
 
@@ -6,7 +11,7 @@ const fetchAllProducts = async ({
   pageSize = 10,
   search = "",
   sortBy = "id",
-  sortOrder = "asc",
+  sortOrder = "desc",
   userId,
 }) => {
   return await paginateQuery(Product, {

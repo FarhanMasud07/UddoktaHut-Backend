@@ -18,12 +18,20 @@ const addProduct = async (req, res, next) => {
 
 const getAllProducts = async (req, res, next) => {
   try {
-    // req.query is already validated and transformed by middleware
+    const { search = "" } = req.query;
     const result = await fetchAllProducts({
       ...req.query,
+      search,
       userId: req.user.id,
     });
-    res.json(result);
+    // Convert Sequelize instances to plain objects
+    const products = result.data.map((product) => product.get({ plain: true }));
+    res.json({
+      data: products,
+      total: result.total,
+      page: result.page,
+      pageSize: result.pageSize,
+    });
   } catch (err) {
     next(err);
   }
