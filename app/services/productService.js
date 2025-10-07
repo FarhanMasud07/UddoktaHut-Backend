@@ -44,4 +44,15 @@ const updateProduct = async (id, data, userId) => {
   await product.update(data);
   return product;
 };
-export { fetchAllProducts, createProduct, updateProduct };
+
+const deleteProduct = async (productId, userId) => {
+  const product = await Product.findOne({
+    where: { id: productId, user_id: userId },
+  });
+  if (!product) {
+    throw new Error("Product not found or not owned by user");
+  }
+  await product.destroy();
+  return { message: "Product deleted successfully" };
+};
+export { fetchAllProducts, createProduct, updateProduct, deleteProduct };

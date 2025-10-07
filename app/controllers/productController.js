@@ -2,6 +2,7 @@ import {
   fetchAllProducts,
   createProduct,
   updateProduct,
+  deleteProduct,
 } from "../services/productService.js";
 
 const addProduct = async (req, res, next) => {
@@ -38,4 +39,15 @@ const editProduct = async (req, res, next) => {
   }
 };
 
-export { getAllProducts, addProduct, editProduct };
+const removeProduct = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const productId = req.params.id;
+    const result = await deleteProduct(productId, userId);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { getAllProducts, addProduct, editProduct, removeProduct };
