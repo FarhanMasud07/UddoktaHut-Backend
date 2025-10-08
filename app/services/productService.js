@@ -1,8 +1,3 @@
-// To optimize search performance, add indexes in a migration:
-// await queryInterface.addIndex('Products', ['name']);
-// await queryInterface.addIndex('Products', ['category']);
-// await queryInterface.addIndex('Products', ['sku']);
-
 import { Product, Store } from "../models/RootModel.js";
 import { paginateQuery } from "../lib/pagination.js";
 
@@ -60,4 +55,5 @@ const deleteProduct = async (productId, userId) => {
   await product.destroy();
   return { message: "Product deleted successfully" };
 };
+
 export { fetchAllProducts, createProduct, updateProduct, deleteProduct };

@@ -1,18 +1,42 @@
+import { paginateQuery } from "../lib/pagination.js";
 import { Store, Product } from "../models/RootModel.js";
 
-const getVerifiedStore = async ({ storeName }) => {
-  const store = await Store.findOne({ where: { store_name: storeName } });
-  if (!store) return null;
-  // Fetch only active products for this store
-  const productsRaw = await Product.findAll({
-    where: { store_id: store.id, status: "Active" },
+const getStoreProducts = async (storeName, query) => {
+  const {
+    page = 1,
+    pageSize = 10,
+    search = "",
+    sortBy = "id",
+    sortOrder = "desc",
+  } = query;
+  const result = await paginateQuery(Product, {
+    page,
+    pageSize,
+    search,
+    searchFields: ["name", "category", "sku"],
+    sortBy,
+    sortOrder,
+    include: [
+      {
+        model: Store,
+        where: { store_name: storeName },
+        attributes: [],
+      },
+    ],
+    where: { status: "Active" },
   });
-  // Omit user_id from each product
-  const products = productsRaw.map(({ dataValues }) => {
-    const { user_id, ...rest } = dataValues;
-    return rest;
+  // Only return public fields
+  const products = result.data.map((product) => {
+    const { id, name, image, price, stock, status, category, sku } =
+      product.get({ plain: true });
+    return { id, name, image, price, stock, status, category, sku };
   });
-  return { store, products };
+  return {
+    data: products,
+    total: result.total,
+    page: result.page,
+    pageSize: result.pageSize,
+  };
 };
 
-export { getVerifiedStore };
+export { getStoreProducts };

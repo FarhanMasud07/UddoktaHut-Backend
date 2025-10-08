@@ -16,8 +16,6 @@ import {
 
 const router = Router();
 
-// Only allow GET, and only for authenticated users, with query validation
-
 router.get(
   "/",
   authenticateUser,
