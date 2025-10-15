@@ -9,6 +9,7 @@ const getStoreProducts = async (storeName, query) => {
     sortBy = "id",
     sortOrder = "desc",
   } = query;
+
   const result = await paginateQuery(Product, {
     page,
     pageSize,
@@ -25,12 +26,13 @@ const getStoreProducts = async (storeName, query) => {
     ],
     where: { status: "Active" },
   });
-  // Only return public fields
+
   const products = result.data.map((product) => {
     const { id, name, image, price, stock, status, category, sku } =
       product.get({ plain: true });
     return { id, name, image, price, stock, status, category, sku };
   });
+
   return {
     data: products,
     total: result.total,
@@ -39,4 +41,26 @@ const getStoreProducts = async (storeName, query) => {
   };
 };
 
-export { getStoreProducts };
+const getOwnerStoreInfo = async (storeName) => {
+  const store = await Store.findOne({
+    where: { store_name: storeName },
+    attributes: ["store_name", "template_name", "store_type"],
+  });
+  if (!store) {
+    throw new Error("Store not found");
+  }
+  return store.get({ plain: true });
+};
+
+const updateStoreTemplate = async (storeName, templateName, userId) => {
+  const store = await Store.findOne({
+    where: { store_name: storeName, user_id: userId },
+  });
+  if (!store) {
+    throw new Error("Store not found or not owned by user");
+  }
+  await store.update({ template_name: templateName });
+  return store.get({ plain: true });
+};
+
+export { getStoreProducts, updateStoreTemplate, getOwnerStoreInfo };

@@ -7,6 +7,7 @@ import {
 } from "../controllers/productController.js";
 import { authenticateUser } from "../middleware/authMiddleware.js";
 import { validate } from "../middleware/validateMiddleware.js";
+import { checkOwnerSubscription } from "../middleware/subscriptionMiddleware.js";
 import { paginationQuerySchema } from "../validations/paginationSchema.js";
 import {
   productCreateSchema,
@@ -19,6 +20,7 @@ const router = Router();
 router.get(
   "/",
   authenticateUser,
+  checkOwnerSubscription,
   validate(paginationQuerySchema, "query"),
   getAllProducts
 );
@@ -26,6 +28,7 @@ router.get(
 router.post(
   "/",
   authenticateUser,
+  checkOwnerSubscription,
   validate(productCreateSchema, "body"),
   addProduct
 );
@@ -33,6 +36,7 @@ router.post(
 router.patch(
   "/:id",
   authenticateUser,
+  checkOwnerSubscription,
   validate(productUpdateSchema, "body"),
   editProduct
 );
@@ -40,6 +44,7 @@ router.patch(
 router.delete(
   "/:id",
   authenticateUser,
+  checkOwnerSubscription,
   validate(productIdParamSchema, "params"),
   removeProduct
 );
