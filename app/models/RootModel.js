@@ -70,7 +70,7 @@ const syncSequlizeBasedOnEnvironment = async () => {
       await sequelize.sync({ force: true });
       break;
     case "production":
-      // await sequelize.sync({ force: true });
+      await sequelize.sync({ force: true });
       console.log("✅ Running in production mode, use migrations!");
       break;
     default:
