@@ -50,6 +50,8 @@ const getSubscriptionStatus = async ({ userId }) => {
       phoneNumber: user.phone_number,
       onboarded: user.Roles[0]?.user_roles?.onboarded,
       role: user.Roles[0]?.user_roles?.role_id,
+      template_name: user.Store.template_name,
+      storeName: user.Store.store_name,
     };
 
     user && (userData.isActive = isActive);
