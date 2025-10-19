@@ -24,20 +24,14 @@ A robust multi-tenant SaaS e-commerce backend built with Node.js, Express, and S
 - **Pagination** - Efficient large dataset handling
 - **Search Functionality** - Full-text search across products
 
-## 📋 Table of Contents
+## 📋 Documentation
 
-- [Architecture](#architecture)
-- [Database Schema](#database-schema)
-- [API Documentation](#api-documentation)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Subscription System](#subscription-system)
-- [Deployment](#deployment)
-- [Project Structure](#project-structure)
-- [Development Commands](#development-commands)
-- [Contributing](#contributing)
-- [Complete Project Repositories](#complete-project-repositories)
+- **[Architecture Guide](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/ARCHITECTURE.md)** - System design, multi-tenant architecture, and component interactions
+- **[Database Documentation](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DATABASE.md)** - Complete schema, relationships, and migration strategies
+- **[API Reference](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/API.md)** - Complete API documentation with examples and authentication
+- **[Subscription System](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/SUBSCRIPTION.md)** - Trial management, middleware, and access control details
+- **[Deployment Guide](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DEPLOYMENT.md)** - Production deployment, Docker setup, and hosting strategies
+- **[Visual Diagrams](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DIAGRAMS.md)** - Architecture diagrams, database flows, and system visualizations
 
 ## 🏗️ Architecture
 
