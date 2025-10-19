@@ -34,7 +34,10 @@ A robust multi-tenant SaaS e-commerce backend built with Node.js, Express, and S
 - [Usage](#usage)
 - [Subscription System](#subscription-system)
 - [Deployment](#deployment)
+- [Project Structure](#project-structure)
+- [Development Commands](#development-commands)
 - [Contributing](#contributing)
+- [Complete Project Repositories](#complete-project-repositories)
 
 ## 🏗️ Architecture
 
@@ -51,7 +54,7 @@ User → Store → Products
 Roles  Subscription
 ```
 
-For detailed architecture information, see [ARCHITECTURE.md](./docs/ARCHITECTURE.md)
+For detailed architecture information, see [ARCHITECTURE.md](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/ARCHITECTURE.md)
 
 ## 🗄️ Database Schema
 
@@ -73,7 +76,7 @@ User → Store → Subscription → Plan
 Store → Products
 ```
 
-For detailed schema documentation, see [DATABASE.md](./docs/DATABASE.md)
+For detailed schema documentation, see [DATABASE.md](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DATABASE.md)
 
 ## 📚 API Documentation
 
@@ -100,7 +103,7 @@ For detailed schema documentation, see [DATABASE.md](./docs/DATABASE.md)
 
 - `GET /api/subscription/status` - Get user subscription status
 
-For complete API documentation, see [API.md](./docs/API.md)
+For complete API documentation, see [API.md](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/API.md)
 
 ## 🔧 Installation
 
@@ -226,7 +229,7 @@ The application uses Sequelize ORM with PostgreSQL. Configuration is managed in 
 - `active` - Paid subscription active
 - `expired` - Subscription/trial ended
 
-For detailed subscription documentation, see [SUBSCRIPTION.md](./docs/SUBSCRIPTION.md)
+For detailed subscription documentation, see [SUBSCRIPTION.md](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/SUBSCRIPTION.md)
 
 ## 🚀 Deployment
 
@@ -245,7 +248,7 @@ For detailed subscription documentation, see [SUBSCRIPTION.md](./docs/SUBSCRIPTI
 NODE_ENV=production npx sequelize-cli db:migrate
 ```
 
-For complete deployment guide, see [DEPLOYMENT.md](./docs/DEPLOYMENT.md)
+For complete deployment guide, see [DEPLOYMENT.md](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DEPLOYMENT.md)
 
 ## 📖 Project Structure
 
@@ -311,12 +314,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Related Documentation
 
-- [Architecture Guide](./docs/ARCHITECTURE.md)
-- [Database Schema](./docs/DATABASE.md)
-- [API Reference](./docs/API.md)
-- [Subscription System](./docs/SUBSCRIPTION.md)
-- [Deployment Guide](./docs/DEPLOYMENT.md)
-- [Visual Diagrams](./docs/DIAGRAMS.md)
+- [Architecture Guide](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/ARCHITECTURE.md)
+- [Database Schema](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DATABASE.md)
+- [API Reference](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/API.md)
+- [Subscription System](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/SUBSCRIPTION.md)
+- [Deployment Guide](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DEPLOYMENT.md)
+- [Visual Diagrams](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DIAGRAMS.md)
 
 ## 🖥️ Complete Project Repositories
 
