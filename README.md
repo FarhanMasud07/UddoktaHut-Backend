@@ -31,7 +31,6 @@ A robust multi-tenant SaaS e-commerce backend built with Node.js, Express, and S
 - **[API Reference](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/API.md)** - Complete API documentation with examples and authentication
 - **[Subscription System](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/SUBSCRIPTION.md)** - Trial management, middleware, and access control details
 - **[Deployment Guide](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DEPLOYMENT.md)** - Production deployment, Docker setup, and hosting strategies
-- **[Visual Diagrams](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DIAGRAMS.md)** - Architecture diagrams, database flows, and system visualizations
 
 ## 🏗️ Architecture
 
@@ -313,7 +312,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [API Reference](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/API.md)
 - [Subscription System](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/SUBSCRIPTION.md)
 - [Deployment Guide](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DEPLOYMENT.md)
-- [Visual Diagrams](https://github.com/FarhanMasud07/UddoktaHut-Backend/blob/main/docs/DIAGRAMS.md)
 
 ## 🖥️ Complete Project Repositories
 
