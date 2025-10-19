@@ -409,48 +409,52 @@ graph TD
 
 ### Subscription Lifecycle Management
 
-```mermaid
-stateDiagram-v2
-    [*] --> UserRegistration
+````mermaid
+flowchart TD
+    Start([User Registration]) --> CreateStore[Create Store & Trial]
 
-    UserRegistration --> StoreCreation
+    CreateStore --> TrialActive[Trial Active - 7 Days]
 
-    state StoreCreation {
-        [*] --> CreateStore
-        CreateStore --> CreateTrialSubscription
-        CreateTrialSubscription --> TrialActive
-    }
+    TrialActive --> TrialCheck{Trial Status?}
 
-    state TrialActive {
-        [*] --> ValidTrial
-        ValidTrial --> TrialWarning : 2 days left
-        TrialWarning --> TrialExpired : 0 days left
-        ValidTrial --> PaidSubscription : User Subscribes
-    }
+    TrialCheck -->|Valid| ContinueTrial[Continue Trial Period]
+    TrialCheck -->|2 Days Left| TrialWarning[Trial Expiry Warning]
+    TrialCheck -->|Expired| TrialExpired[Trial Expired - Read Only]
+    TrialCheck -->|User Subscribes| Subscribe[Activate Paid Subscription]
 
-    state PaidSubscription {
-        [*] --> ActiveSubscription
-        ActiveSubscription --> RenewalDue : Near expiry
-        RenewalDue --> ActiveSubscription : Auto-renewal
-        RenewalDue --> SubscriptionExpired : Payment failed
-        ActiveSubscription --> SubscriptionExpired : User cancels
-    }
+    ContinueTrial --> TrialCheck
+    TrialWarning --> TrialCheck
 
-    state TrialExpired {
-        [*] --> ReadOnlyAccess
-        ReadOnlyAccess --> PaidSubscription : User subscribes
-    }
+    Subscribe --> ActiveSub[Active Subscription]
 
-    state SubscriptionExpired {
-        [*] --> LimitedAccess
-        LimitedAccess --> PaidSubscription : User renews
-    }
+    ActiveSub --> SubCheck{Subscription Status?}
 
-    TrialExpired --> [*] : Account deletion
-    SubscriptionExpired --> [*] : Account deletion
-```
+    SubCheck -->|Active| ContinueSub[Continue Subscription]
+    SubCheck -->|Near Expiry| RenewalDue[Renewal Required]
+    SubCheck -->|User Cancels| Cancelled[Subscription Cancelled]
+    SubCheck -->|Payment Failed| PaymentFailed[Payment Failed]
 
-### Subscription Validation Middleware Flow
+    ContinueSub --> SubCheck
+    RenewalDue --> AutoRenew[Auto-Renewal Success]
+    RenewalDue --> PaymentFailed
+
+    AutoRenew --> ActiveSub
+
+    Cancelled --> LimitedAccess[Limited Access Mode]
+    PaymentFailed --> LimitedAccess
+    TrialExpired --> LimitedAccess
+
+    LimitedAccess --> Resubscribe{User Action?}
+    Resubscribe -->|Subscribe| Subscribe
+    Resubscribe -->|Delete Account| AccountDeletion[Account Deletion]
+
+    AccountDeletion --> End([End])
+
+    style TrialActive fill:#e1f5fe
+    style ActiveSub fill:#e8f5e8
+    style LimitedAccess fill:#fff3e0
+    style AccountDeletion fill:#ffebee
+```### Subscription Validation Middleware Flow
 
 ```mermaid
 flowchart TD
@@ -486,7 +490,7 @@ flowchart TD
     style Return403Sub fill:#FFB6C1
     style Return403Expired fill:#FFB6C1
     style Return403Trial fill:#FFB6C1
-```
+````
 
 ## 🏢 Multi-Tenant Architecture
 
@@ -645,58 +649,6 @@ graph TB
     APP1 --> Logs
     APP2 --> Logs
     APP3 --> Logs
-```
-
-### Docker Container Architecture
-
-```mermaid
-graph TB
-    subgraph "Docker Host"
-        subgraph "Application Container"
-            NodeApp[Node.js Application]
-            PM2[PM2 Process Manager]
-        end
-
-        subgraph "Database Container"
-            PostgresDB[(PostgreSQL Database)]
-            PGData[/var/lib/postgresql/data]
-        end
-
-        subgraph "Reverse Proxy Container"
-            Nginx[nginx Reverse Proxy]
-            SSL[SSL Certificates]
-        end
-
-        subgraph "Cache Container"
-            RedisCache[(Redis Cache)]
-            RedisData[/data]
-        end
-
-        subgraph "Shared Volumes"
-            AppLogs[/var/log/app]
-            Uploads[/uploads]
-            Backups[/backups]
-        end
-    end
-
-    subgraph "External"
-        Internet[Internet Traffic]
-        Registry[Docker Registry]
-    end
-
-    Internet --> Nginx
-    Nginx --> NodeApp
-    NodeApp --> PostgresDB
-    NodeApp --> RedisCache
-
-    NodeApp --> AppLogs
-    NodeApp --> Uploads
-    PostgresDB --> Backups
-
-    Registry --> NodeApp
-    Registry --> PostgresDB
-    Registry --> Nginx
-    Registry --> RedisCache
 ```
 
 ## 📊 Data Flow Patterns
