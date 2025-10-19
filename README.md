@@ -316,8 +316,31 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [API Reference](./docs/API.md)
 - [Subscription System](./docs/SUBSCRIPTION.md)
 - [Deployment Guide](./docs/DEPLOYMENT.md)
+- [Visual Diagrams](./docs/DIAGRAMS.md)
 
-## 📞 Support
+## 🖥️ Complete Project Repositories
+
+This is part of a **full-stack SaaS e-commerce solution** with separate frontend and backend repositories:
+
+### Backend (Current Repository)
+
+**Repository:** [https://github.com/FarhanMasud07/UddoktaHut-Backend](https://github.com/FarhanMasud07/UddoktaHut-Backend)
+
+- **Multi-tenant API** - Subscription-based store management
+- **JWT Authentication** - Secure user and role management
+- **Product Management** - Full CRUD with search and pagination
+- **Subscription System** - Trial management and access control
+
+### Frontend Integration
+
+**Repository:** [https://github.com/FarhanMasud07/UddoktaHut](https://github.com/FarhanMasud07/UddoktaHut)
+
+- **Multi-store Frontend** - Dynamic store pages based on store templates
+- **Customer Shopping Experience** - Product browsing and purchasing interface
+- **Store Owner Dashboard** - Product management and analytics interface
+- **Template Customization** - Theme switching and store personalization
+
+The frontend consumes the public store APIs (`/store/:storeName/products`) for customer-facing pages and the protected APIs for store management, creating a complete SaaS e-commerce solution.## 📞 Support
 
 For support and questions:
 
